@@ -126,3 +126,84 @@ void actualizarOwner(const string &filename) {
     else
         cout << "Hubo un error al actualizar el dueño.\n\n";
 }
+
+void eliminarOwner(const string &filename) {
+    string Ced;
+
+    cout << "Ingrese la cedula del owner a eliminar: ";
+    cin >> Ced;
+
+    ifstream file(filename.c_str()); 
+    if (!file.is_open()) {
+        cerr << "Error al abrir el archivo " << filename << "\n";
+        return;
+    }
+
+    ofstream tempFile("temp.csv"); 
+    if (!tempFile.is_open()) {
+        cerr << "Error al abrir el archivo temporal\n";
+        return;
+    }
+
+    string line;
+    bool deleted = false;
+    while (getline(file, line)) {
+        if (line.substr(0, line.find(',')) == Ced) {
+            deleted = true;
+        } else {
+            tempFile << line << "\n";
+        }
+    }
+
+    file.close();
+    tempFile.close();
+
+    remove(filename.c_str()); 
+    rename("temp.csv", filename.c_str()); 
+
+    if (deleted)
+        cout << "El owner con la cedula: " << Ced << " fue eliminado correctamente.\n\n";
+    else
+        cout << "No se encontro un owner con la cedula: " << Ced << ".\n\n";
+}
+
+int main() {
+    string filename = "owners.csv";
+    Owner owner;
+    owner.filename = filename;
+
+    int option;
+
+    do {
+        cout << "1. Agregar nuevo owner\n";
+        cout << "2. Ver todos los owners\n";
+        cout << "3. Actualizar datos de un owner\n";
+        cout << "4. Eliminar un owner\n";
+        cout << "5. Salir\n";
+        cout << "Seleccione una opción: ";
+        cin >> option;
+        cout << "\n";
+
+        switch (option) {
+            case 1:
+                crearOwner(owner);
+                break;
+            case 2:
+                leerOwners(filename);
+                break;
+            case 3:
+                actualizarOwner(filename);
+                break;
+            case 4:
+                eliminarOwner(filename);
+                break;
+            case 5:
+                cout << "Saliendo del programa...\n";
+                break;
+            default:
+                cout << "Opción inválida. Intente de nuevo.\n";
+        }
+    } while (option != 5);
+
+    return 0;
+}
