@@ -98,3 +98,125 @@ void verOwners() {
         cout << "Nombre: " << owners[i].name << ", Dirección: " << owners[i].address << ", Teléfono: " << owners[i].phone << "\n";
     }
 }
+
+void actualizarOwner() {
+    string name;
+    cout << "Ingrese el nombre del owner a actualizar: ";
+    cin >> name;
+    for (int i = 0; i < ownerCount; i++) {
+        if (owners[i].name == name) {
+            cout << "Ingrese la nueva direccion: ";
+            cin >> owners[i].address;
+            cout << "Ingrese el nuevo telefono: ";
+            cin >> owners[i].phone;
+            cout << "Datos actualizados.\n";
+            return;
+        }
+    }
+    cout << "owner no encontrado.\n";
+}
+
+void eliminarOwner() {
+    string name;
+    cout << "Ingrese el nombre del owner a eliminar: ";
+    cin >> name;
+    for (int i = 0; i < ownerCount; i++) {
+        if (owners[i].name == name) {
+            for (int j = i; j < ownerCount - 1; j++) {
+                owners[j] = owners[j + 1];
+            }
+            ownerCount--;
+            cout << "owner eliminado.\n";
+            return;
+        }
+    }
+    cout << "owner no encontrado.\n";
+}
+
+int main() {
+    int option;
+
+    do {
+        cout << "1. Gestion de Mascotas\n";
+        cout << "2. Gestion de Owners\n";
+        cout << "3. Salir\n";
+        cout << "Seleccione una opcion: ";
+        cin >> option;
+        cout << "\n";
+
+        if (option == 1) {
+            int petOption;
+            do {
+                cout << "1. Agregar nueva mascota\n";
+                cout << "2. Ver todas las mascotas\n";
+                cout << "3. Actualizar datos de una mascota\n";
+                cout << "4. Eliminar una mascota\n";
+                cout << "0. Volver\n";
+                cout << "Seleccione una opción: ";
+                cin >> petOption;
+                cout << "\n";
+
+                switch (petOption) {
+                    case 1:
+                        agregarMascota();
+                        break;
+                    case 2:
+                        verMascotas();
+                        break;
+                    case 3:
+                        actualizarMascota();
+                        break;
+                    case 4:
+                        eliminarMascota();
+                        break;
+                    case 0:
+                        cout << "Saliendo\n";
+                        cout << "\n";
+                        break;
+                    default:
+                        cout << "Opción inválida.\n";
+                }
+            } while (petOption != 0);
+
+        } else if (option == 2) {
+            int ownerOption;
+            do {
+                cout << "1. Agregar nuevo owner\n";
+                cout << "2. Ver todos los owners\n";
+                cout << "3. Actualizar datos de un owner\n";
+                cout << "4. Eliminar un owner\n";
+                cout << "0. Volver\n";
+                cout << "Seleccione una opción: ";
+                cin >> ownerOption;
+                cout << "\n";
+
+                switch (ownerOption) {
+                    case 1:
+                        agregarOwner();
+                        break;
+                    case 2:
+                        verOwners();
+                        break;
+                    case 3:
+                        actualizarOwner();
+                        break;
+                    case 4:
+                        eliminarOwner();
+                        break;
+                    case 0:
+                        cout << "Saliendo\n";
+                        cout << "\n";
+                        break;
+                    default:
+                        cout << "Opcion inválida. Intente de nuevo.\n";
+                }
+            } while (ownerOption != 0);
+        } else if (option != 3) {
+            cout << "Opcion inválida. Intente de nuevo.\n";
+        }
+    } while (option != 3);
+
+    cout << "Saliendo del programa...\n";
+    return 0;
+}
+
