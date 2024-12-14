@@ -37,3 +37,27 @@ void agregarMascota() {
         cout << "No se pueden agregar más mascotas.\n";
     }
 }
+
+void verMascotas() {
+    for (int i = 0; i < petCount; i++) {
+        cout << "Nombre: " << pets[i].name << ", Tipo: " << pets[i].type << ", Edad: " << pets[i].age << "\n";
+    }
+}
+
+void actualizarMascota() {
+    string name;
+    cout << "Ingrese el nombre de la mascota a actualizar: ";
+    cin >> name;
+    for (int i = 0; i < petCount; i++) {
+        if (pets[i].name == name) {
+            cout << "Ingrese el nuevo tipo: ";
+            cin >> pets[i].type;
+            cout << "Ingrese la nueva edad: ";
+            cin >> pets[i].age;
+            cout << "Datos actualizados.\n";
+            return;
+        }
+    }
+    cout << "Mascota no encontrada.\n";
+}
+
