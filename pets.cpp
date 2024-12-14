@@ -35,3 +35,135 @@ void AgregarMascota(Pet &pet) {
         cerr << "Error al abrir el archivo " << pet.filename << "\n";
     }
 }
+
+void leerPets(const string &filename) {
+    ifstream file(filename.c_str()); 
+    if (file.is_open()) {
+        string line;
+        cout << "ID | Nombre | Tipo | Raza | Cedula del owner |\n";
+        while (getline(file, line)) {
+            cout << line << "\n";
+        }
+        cout << "\n";
+        file.close();
+    } else {
+        cerr << "Error al abrir el archivo " << filename << "\n";
+    }
+}
+
+void ActuPets(const string &filename) {
+    string ID, newID, newName, newTipo, newRaza, newOwnerCed;
+    bool exists = false;
+
+    cout << "Ingrese el ID de la mascota a actualizar: ";
+    cin >> ID;
+
+    ifstream file(filename.c_str()); 
+    if (!file.is_open()) {
+        cerr << "Error al abrir el archivo " << filename << "\n";
+        return;
+    }
+
+    string line;
+    while (getline(file, line)) {
+        if (line.substr(0, line.find(',')) == ID) {
+            exists = true;
+            break;
+        }
+    }
+    file.close();
+
+    if (!exists) {
+        cout << "No se encontro una mascota con el ID: " << ID << ".\n";
+        return;
+    }
+
+    cout << "Status: Modificando\n";
+    cout << "   Ingrese el nuevo ID de la mascota: ";
+    cin >> newID;
+    cout << "   Ingrese el nuevo nombre de la mascota: ";
+    cin >> newName;
+    cout << "   Ingrese el nuevo tipo de la mascota: ";
+    cin >> newTipo;
+    cout << "   Ingrese la nueva raza de la mascota: ";
+    cin.ignore();
+    getline(cin, newRaza);
+    cout << "   Ingrese la nueva cedula del owner: ";
+    cin >> newOwnerCed;
+
+    string updatedData = newID + "," + newName + "," + newTipo + "," + newRaza + "," + newOwnerCed;
+
+    ifstream inputFile(filename.c_str()); 
+    if (!inputFile.is_open()) {
+        cerr << "Error al abrir el archivo " << filename << "\n";
+        return;
+    }
+
+    ofstream tempFile("temp.csv"); 
+    if (!tempFile.is_open()) {
+        cerr << "Error al abrir el archivo temporal\n";
+        return;
+    }
+
+    bool updated = false;
+
+    while (getline(inputFile, line)) {
+        if (line.substr(0, line.find(',')) == ID) {
+            tempFile << updatedData << "\n";
+            updated = true;
+        } else {
+            tempFile << line << "\n";
+        }
+    }
+
+    inputFile.close();
+    tempFile.close();
+
+    remove(filename.c_str()); 
+    rename("temp.csv", filename.c_str()); 
+
+    if (updated)
+        cout << "La mascota con el ID: " << ID << " fue actualizada correctamente.\n\n";
+    else
+        cout << "Hubo un error al actualizar la mascota.\n";
+}
+
+void deletePet(const string &filename) {
+    string ID;
+
+    cout << "Ingrese el ID de la mascota a eliminar: ";
+    cin >> ID;
+
+    ifstream file(filename.c_str()); 
+    if (!file.is_open()) {
+        cerr << "Error al abrir el archivo " << filename << "\n";
+        return;
+    }
+
+    ofstream tempFile("temp.csv"); 
+    if (!tempFile.is_open()) {
+        cerr << "Error al abrir el archivo temporal\n";
+        return;
+    }
+
+    string line;
+    bool deleted = false;
+    while (getline(file, line)) {
+        if (line.substr(0, line.find(',')) == ID) {
+            deleted = true;
+        } else {
+            tempFile << line << "\n";
+        }
+    }
+
+    file.close();
+    tempFile.close();
+
+    remove(filename.c_str()); 
+    rename("temp.csv", filename.c_str());
+
+    if (deleted)
+        cout << "La mascota con el ID: " << ID << " fue eliminada correctamente.\n";
+    else
+        cout << "No se encontro una mascota con el ID: " << ID << ".\n";
+}
