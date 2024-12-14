@@ -167,3 +167,45 @@ void deletePet(const string &filename) {
     else
         cout << "No se encontro una mascota con el ID: " << ID << ".\n";
 }
+
+int main() {
+    string filename = "pets.csv";
+    Pet pet;
+    pet.filename = filename;
+
+    int option;
+
+    do {
+        cout << "1. Agregar nueva mascota\n";
+        cout << "2. Ver todas las mascotas\n";
+        cout << "3. Actualizar datos de una mascota\n";
+        cout << "4. Eliminar una mascota\n";
+        cout << "5. Salir\n";
+        cout << "Seleccione una opción: ";
+        cin >> option;
+        cout << "\n";
+
+        switch (option) {
+            case 1:
+                AgregarMascota(pet);
+                break;
+            case 2:
+                leerPets(filename);
+                break;
+            case 3:
+                ActuPets(filename);
+                break;
+            case 4:
+                deletePet(filename);
+                break;
+            case 5:
+                cout << "Saliendo del programa...\n";
+                break;
+            default:
+                cout << "Opción inválida. Intente de nuevo.\n";
+        }
+    } while (option != 5);
+
+    return 0;
+}
+
