@@ -7,3 +7,9 @@ struct Pet {
     string type;
     int age;
 };
+
+struct Owner {
+    string name;
+    string address;
+    string phone;
+};
